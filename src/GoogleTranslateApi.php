@@ -2,17 +2,17 @@
 
 namespace GoogleTranslateApi;
 
+use GoogleTranslateApi\JavascriptBitwiseOperators as JBO;
+
 class Client
 {
 
     public function translate($query)
     {
+        require 'JavascriptBitwiseOperators.php';
         //echo $this->shr32(-1240148506, 6);
-        echo $this->getTKK();
-        echo '<br />';
-        echo $tk = $this->tk($query, $this->getTKK());
-        exit;
-        $tk = $this->tk($query, $this->getTKK());
+        $tkk = $this->getTKK();
+        $tk = $this->tk($query, $tkk);
         $url = 'https://translate.google.cn/translate_a/single?client=t&sl=auto&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=3&tsel=3&kc=1&tk=' . $tk . '&q=' . rawurlencode($query);
 
         return $this->curlGet($url, $this->getOption());
@@ -27,77 +27,6 @@ class Client
         return $option;
     }
 
-    /**
-     * javascript 左移运算 <<
-     * @param $x
-     * @param $bits
-     * @return number
-     */
-    private function shl32($x,$bits)
-    {
-        $bin = decbin($x);
-        $l = mb_strlen($bin);
-        $signed = mb_substr($bin, 0, 1);
-        if($l > 32){
-            $bin = mb_substr($bin,-31);
-        }else{
-            $bin = str_pad(mb_substr($bin,1), 31, '0', STR_PAD_LEFT);
-        }
-        $pad = '';
-        $bin = $signed.substr($bin.str_pad($pad,$bits,0,STR_PAD_RIGHT),-31);
-        return bindec($bin);
-
-    }
-
-    /**
-     * 无符号32位右移 ;模拟实现JS的>>>，无符号右移。实现原理，化为二进制，先右移，后补零。
-     * @param mixed $x 要进行操作的数字，如果是字符串，必须是十进制形式
-     * @param string $bits 右移位数
-     * @return mixed 结果，如果超出整型范围将返回浮点数
-     */
-    private function unshr32($x, $bits)
-    {
-        // 位移量超出范围的两种情况
-        if ($bits <= 0) {
-            return $x;
-        }
-        if ($bits >= 32) {
-            return 0;
-        }
-        //转换成代表二进制数字的字符串
-        $bin = decbin($x);
-        $l = mb_strlen($bin);
-        //字符串长度超出则截取底32位，长度不够，则填充高位为0到32位
-        if ($l > 32) {
-            $bin = mb_substr($bin, $l - 32, 32);
-        } elseif ($l < 32) {
-            $bin = str_pad($bin, 32, '0', STR_PAD_LEFT);
-        }
-        //取出要移动的位数，并在左边填充0
-        return bindec(str_pad(mb_substr($bin, 0, 32 - $bits), 32, '0', STR_PAD_LEFT));
-    }
-
-    private function shr32($x, $bits)
-    {
-        // 位移量超出范围的两种情况
-        if ($bits <= 0) {
-            return $x;
-        }
-        if ($bits >= 32) {
-            return 0;
-        }
-        //转换成代表二进制数字的字符串
-        $bin = decbin($x);
-        $l = mb_strlen($bin);
-        //字符串长度超出则截取底32位，长度不够，则填充高位为0到32位
-        if ($l > 32) {
-            $bin = mb_substr($bin, $l - 32, 32);
-        } elseif ($l < 32) {
-            $bin = str_pad($bin, 32, '0', STR_PAD_LEFT);
-        }
-        //取出要移动的位数，并在左边填充0
-        return bindec(str_pad(mb_substr($bin, 0, 32 - $bits), 32, '0', STR_PAD_LEFT));
-    }
 
     private function cipher($a, $b)
     {
@@ -105,8 +34,9 @@ class Client
             $c = substr($b, $d + 2, 1);
             $c = ord('a') <= ord($c) ? ord($c) - 87 : intval($c);
             //var_dump([$a,$c,'+' == substr($b, $d + 1, 1) ? $a >> $c : $a << $c]);
-            $c = '+' == substr($b, $d + 1, 1) ? $this->unshr32($a,$c) : $a << $c;
-            $a = '+' == substr($b, $d, 1) ? $a + $c & 4294967295 : $a ^ $c;
+            $c = '+' == substr($b, $d + 1, 1) ? JBO::unSignedShiftRightOperator($a, $c) : JBO::shiftLeftOperator($a,
+                $c);
+            $a = '+' == substr($b, $d, 1) ? JBO::andOperator($a + $c, 4294967295) : JBO::xorOperator($a, $c);
             //var_dump([$c,$a]);
         }
         return $a;
@@ -126,19 +56,23 @@ class Client
                 $g[$d++] = $c;
             } else {
                 if (2048 < $c) {
-                    $g[$d++] = $c >> 6 | 192;
+                    $g[$d++] = JBO::orOperator(JBO::shiftRightOperator($c, 6), 192);//$c >> 6 | 192;
                 } else {
-                    if (55296 == ($c & 64512) && $f + 1 < strlen($a) && 56320 == (ord(substr($a, $f + 1, 1)) & 64512)) {
-                        $c = 65536 + (($c & 1023) << 10) + ord(substr($a, ++$f, 1) & 1023);
-                        $g[$d++] = $c >> 18 | 240;
-                        $g[$d++] = $c >> 12 & 63 | 128;
+                    if (55296 == (JBO::andOperator($c,
+                            64512)) && $f + 1 < strlen($a) && 56320 == JBO::andOperator(ord(substr($a, $f + 1, 1)),
+                            64512)
+                    ) {
+                        $c = 65536 + JBO::shiftLeftOperator(JBO::andOperator($c, 1023),
+                                10) + ord(JBO::andOperator(substr($a, ++$f, 1), 1023));
+                        $g[$d++] = JBO::orOperator(JBO::shiftRightOperator($c,18),240);//$c >> 18 | 240;
+                        $g[$d++] = JBO::orOperator(JBO::andOperator(JBO::shiftRightOperator($c , 12) , 63) , 128);//
                     } else {
-                        $g[$d++] = $c >> 12 | 224;
-                        $g[$d++] = $c >> 6 & 63 | 128;
+                        $g[$d++] = JBO::orOperator(JBO::shiftRightOperator($c,12),224);//$c >> 12 | 224;
+                        $g[$d++] = JBO::orOperator(JBO::andOperator(JBO::shiftRightOperator($c , 6) , 63) , 128);//$c >> 6 & 63 | 128;
                     }
 
                 }
-                $g[$d++] = $c & 63 | 128;
+                $g[$d++] = JBO::orOperator(JBO::andOperator($c,63),128);//$c & 63 | 128;
             }
 
         }
@@ -151,10 +85,10 @@ class Client
         $a = $this->cipher($a, "+-3^+b+-f");
         $a ^= intval($e[1]) ? intval($e[1]) : 0;
         if (0 > $a) {
-            $a = ($a & 2147483647) + 2147483648;
+            $a = JBO::andOperator($a , 2147483647) + 2147483648;
         }
         $a %= 1E6;
-        return $a . '.' + ($a ^ $h);
+        return $a . '.' . JBO::xorOperator($a , $h);
 
     }
 

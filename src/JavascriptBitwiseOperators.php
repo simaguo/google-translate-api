@@ -1,5 +1,5 @@
 <?php
-
+namespace GoogleTranslateApi;
 /**
  * Created by PhpStorm.
  * User: Administrator
