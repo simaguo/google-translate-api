@@ -10,11 +10,12 @@
     }
   ],
   "require": {
-    "php": ">=5.3.0"
+    "php": ">=5.4.0",
+    "simaguo/javascript-bitwise-operators":"~1.0.1"
   },
   "autoload": {
     "psr-4": {
-      "GoogleTranslateApi\\": "src/"
+      "Simaguo\\GoogleTranslateApi\\": "src/"
     }
   }
 }
