@@ -32,11 +32,10 @@ class Client
         for ($d = 0; $d < strlen($b) - 2; $d += 3) {
             $c = substr($b, $d + 2, 1);
             $c = ord('a') <= ord($c) ? ord($c) - 87 : intval($c);
-            //var_dump([$a,$c,'+' == substr($b, $d + 1, 1) ? $a >> $c : $a << $c]);
             $c = '+' == substr($b, $d + 1, 1) ? Tool::unSignedShiftRightOperator($a, $c) : Tool::shiftLeftOperator($a,
                 $c);
             $a = '+' == substr($b, $d, 1) ? Tool::andOperator($a + $c, 4294967295) : Tool::xorOperator($a, $c);
-            //var_dump([$c,$a]);
+
         }
         return $a;
 
@@ -63,15 +62,16 @@ class Client
                     ) {
                         $c = 65536 + Tool::shiftLeftOperator(Tool::andOperator($c, 1023),
                                 10) + ord(Tool::andOperator(substr($a, ++$f, 1), 1023));
-                        $g[$d++] = Tool::orOperator(Tool::shiftRightOperator($c,18),240);//$c >> 18 | 240;
-                        $g[$d++] = Tool::orOperator(Tool::andOperator(Tool::shiftRightOperator($c , 12) , 63) , 128);//
+                        $g[$d++] = Tool::orOperator(Tool::shiftRightOperator($c, 18), 240);//$c >> 18 | 240;
+                        $g[$d++] = Tool::orOperator(Tool::andOperator(Tool::shiftRightOperator($c, 12), 63), 128);//
                     } else {
-                        $g[$d++] = Tool::orOperator(Tool::shiftRightOperator($c,12),224);//$c >> 12 | 224;
-                        $g[$d++] = Tool::orOperator(Tool::andOperator(Tool::shiftRightOperator($c , 6) , 63) , 128);//$c >> 6 & 63 | 128;
+                        $g[$d++] = Tool::orOperator(Tool::shiftRightOperator($c, 12), 224);//$c >> 12 | 224;
+                        $g[$d++] = Tool::orOperator(Tool::andOperator(Tool::shiftRightOperator($c, 6), 63),
+                            128);//$c >> 6 & 63 | 128;
                     }
 
                 }
-                $g[$d++] = Tool::orOperator(Tool::andOperator($c,63),128);//$c & 63 | 128;
+                $g[$d++] = Tool::orOperator(Tool::andOperator($c, 63), 128);//$c & 63 | 128;
             }
 
         }
@@ -82,12 +82,14 @@ class Client
             $a = $this->cipher($a, "+-a^+6");
         }
         $a = $this->cipher($a, "+-3^+b+-f");
-        $a ^= intval($e[1]) ? intval($e[1]) : 0;
+        $e[1] = intval($e[1]) ? intval($e[1]) : 0;
+        $a = Tool::xorOperator($a,$e[1]);
+        //$a ^= intval($e[1]) ? intval($e[1]) : 0;
         if (0 > $a) {
-            $a = Tool::andOperator($a , 2147483647) + 2147483648;
+            $a = Tool::andOperator($a, 2147483647) + 2147483648;
         }
         $a %= 1E6;
-        return $a . '.' . Tool::xorOperator($a , $h);
+        return $a . '.' . Tool::xorOperator($a, $h);
 
     }
 
