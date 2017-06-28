@@ -1,0 +1,125 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017/6/28
+ * Time: 12:24
+ */
+
+
+define('DT_T','t');
+define('DT_SS','ss');
+define('DT_RM','rm');
+define('DT_RW','rw');
+define('DT_QCA','qca');
+define('DT_MD','md');
+define('DT_LD','ld');
+define('DT_EX','ex');
+define('DT_BD','bd');
+define('DT_AT','at');
+
+
+define('LANG_EN', 'en');
+define('LANG_CN', 'zh-CN');
+define('LANG_JA', 'ja');
+define('LANG_AUTO', 'auto');
+define('LANG_SQ', 'sq');
+define('LANG_AR', 'ar');
+define('LANG_AM', 'am');
+define('LANG_AZ', 'az');
+define('LANG_GA', 'ga');
+define('LANG_ET', 'et');
+define('LANG_EU', 'eu');
+define('LANG_BE', 'be');
+define('LANG_BG', 'bg');
+define('LANG_IS', 'is');
+define('LANG_PL', 'pl');
+define('LANG_BS', 'bs');
+define('LANG_FA', 'fa');
+define('LANG_AF', 'af');
+define('LANG_DA', 'da');
+define('LANG_DE', 'de');
+define('LANG_RU', 'ru');
+define('LANG_FR', 'fr');
+define('LANG_TL', 'tl');
+define('LANG_FI', 'fi');
+define('LANG_FY', 'fy');
+define('LANG_KM', 'km');
+define('LANG_KA', 'ka');
+define('LANG_GU', 'gu');
+define('LANG_KK', 'kk');
+define('LANG_HT', 'ht');
+define('LANG_KO', 'ko');
+define('LANG_HA', 'ha');
+define('LANG_NL', 'nl');
+define('LANG_KY', 'ky');
+define('LANG_GL', 'gl');
+define('LANG_CA', 'ca');
+define('LANG_CS', 'cs');
+define('LANG_KN', 'kn');
+define('LANG_CO', 'co');
+define('LANG_HR', 'hr');
+define('LANG_KU', 'ku');
+define('LANG_LA', 'la');
+define('LANG_LV', 'lv');
+define('LANG_LO', 'lo');
+define('LANG_LT', 'lt');
+define('LANG_LB', 'lb');
+define('LANG_RO', 'ro');
+define('LANG_MG', 'mg');
+define('LANG_MT', 'mt');
+define('LANG_MR', 'mr');
+define('LANG_ML', 'ml');
+define('LANG_MS', 'ms');
+define('LANG_MK', 'mk');
+define('LANG_MI', 'mi');
+define('LANG_MN', 'mn');
+define('LANG_BN', 'bn');
+define('LANG_MY', 'my');
+define('LANG_HMN', 'hmn');
+define('LANG_XH', 'xh');
+define('LANG_ZU', 'zu');
+define('LANG_NE', 'ne');
+define('LANG_NO', 'no');
+define('LANG_PA', 'pa');
+define('LANG_PT', 'pt');
+define('LANG_PS', 'ps');
+define('LANG_NY', 'ny');
+define('LANG_SV', 'sv');
+define('LANG_SM', 'sm');
+define('LANG_SR', 'sr');
+define('LANG_ST', 'st');
+define('LANG_SI', 'si');
+define('LANG_EO', 'eo');
+define('LANG_SK', 'sk');
+define('LANG_SL', 'sl');
+define('LANG_SW', 'sw');
+define('LANG_GD', 'gd');
+define('LANG_CEB', 'ceb');
+define('LANG_SO', 'so');
+define('LANG_TG', 'tg');
+define('LANG_TE', 'te');
+define('LANG_TA', 'ta');
+define('LANG_TH', 'th');
+define('LANG_TR', 'tr');
+define('LANG_CY', 'cy');
+define('LANG_UR', 'ur');
+define('LANG_UK', 'uk');
+define('LANG_UZ', 'uz');
+define('LANG_ES', 'es');
+define('LANG_IW', 'iw');
+define('LANG_EL', 'el');
+define('LANG_HAW', 'haw');
+define('LANG_SD', 'sd');
+define('LANG_HU', 'hu');
+define('LANG_SN', 'sn');
+define('LANG_HY', 'hy');
+define('LANG_IG', 'ig');
+define('LANG_IT', 'it');
+define('LANG_YI', 'yi');
+define('LANG_HI', 'hi');
+define('LANG_SU', 'su');
+define('LANG_ID', 'id');
+define('LANG_JW', 'jw');
+define('LANG_YO', 'yo');
+define('LANG_VI', 'vi');

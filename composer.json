@@ -1,6 +1,6 @@
 {
   "name": "simaguo/google-translate-api",
-  "description": "google-translate-api",
+  "description": "Free to use Google Translate",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -16,7 +16,9 @@
   "autoload": {
     "psr-4": {
       "Simaguo\\GoogleTranslateApi\\": "src/"
-    }
+    },
+    "files": ["src/define.php"]
+
   }
 }
 

@@ -8,6 +8,12 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$client = new Simaguo\GoogleTranslateApi\Client();
+$client = new Simaguo\GoogleTranslateApi\Client('package',LANG_EN,LANG_CN);
 
-echo $client->translate('navigate');
+echo $client->translate();
+echo "\n";
+
+$t = $client->from(LANG_CN)->to(LANG_AF)->hl(LANG_AF)->translate('老师');
+
+print_r($t);
+echo "\n";
