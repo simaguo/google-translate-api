@@ -79,11 +79,24 @@ class Client
 
     public function dt($dt = null)
     {
-        if ($dt) {
-            $this->dt = $dt;
+        $default = ['at', 'bd', 'ex', 'ld', 'md', 'qca', 'rw', 'rm', 'ss', 't'];
+
+        if (is_array($dt)) {
+            $value = [];
+            foreach ($dt as $one) {
+                if (in_array($one, $default)) {
+                    $value[] = $one;
+                }
+            }
+            $this->dt = $value;
+        } else {
+            if (in_array($dt, $default)) {
+                $this->dt = $dt;
+            }
         }
         return $this;
     }
+
 
     public function setOption($option = array())
     {
@@ -94,12 +107,14 @@ class Client
     }
 
 
-    public function translate($query = '', $dt = null)
+    public function translate($query = '', $model = MODEL_SIMPLE)
     {
         if ($query) {
             $this->q = $query;
         }
-        $this->dt($dt);
+        /*if(!$model){
+            $model = MODEL_SIMPLE;
+        }*/
 
         $this->tk = $this->tk($this->q, $this->tkk);
 
@@ -107,64 +122,17 @@ class Client
 
         $result = $this->curlGet($url, $this->getOption());
 
-        return $this->filter($result);
+        return $this->filter($result, $model);
     }
 
-    protected function filter($result)
+    protected function filter($result, $model)
     {
-
         $result = json_decode($result);
-
-        if (is_array($this->dt) && false !== array_search('t', $this->dt)) {
-
+        if ($result && $model == MODEL_SIMPLE && is_array($result) && isset($result[0][0][0])) {
             return $result[0][0][0];
         }
 
-        if (is_string($this->dt)) {
-
-
-            switch ($this->dt) {
-                case 'at':
-                    $index = 5;
-                    break;
-                case 'bd':
-                    $index = 1;
-                    break;
-                case 'ex':
-                    $index = 13;
-                    break;
-                case 'ld':
-                    $index = '';
-                    break;
-                case 'md':
-                    $index = 12;
-                    break;
-                case 'qca':
-                    $index = '';
-                    break;
-                case 'rw':
-                    $index = 14;
-                    break;
-                case 'rm':
-                    $index = '';
-                    break;
-                case 't':
-                    $index = 0;
-                    break;
-                case 'ss':
-                    $index = 11;
-                    break;
-                default:
-                    $index = '';
-            }
-
-            if (is_numeric($index) && isset($result[$index]) && $result[$index]) {
-                return $result[$index];
-            }
-        }
-
         return $result;
-
     }
 
     protected function getQueryUrl()

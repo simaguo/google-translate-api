@@ -6,17 +6,19 @@
  * Time: 12:24
  */
 
+defined('MODEL_ALL') ? '' : define('MODEL_ALL', 'all');
+defined('MODEL_SIMPLE') ? '' : define('MODEL_SIMPLE', 'simple');
 
-define('DT_T','t');
-define('DT_SS','ss');
-define('DT_RM','rm');
-define('DT_RW','rw');
-define('DT_QCA','qca');
-define('DT_MD','md');
-define('DT_LD','ld');
-define('DT_EX','ex');
-define('DT_BD','bd');
-define('DT_AT','at');
+define('DT_T', 't');
+define('DT_SS', 'ss');
+define('DT_RM', 'rm');
+define('DT_RW', 'rw');
+define('DT_QCA', 'qca');
+define('DT_MD', 'md');
+define('DT_LD', 'ld');
+define('DT_EX', 'ex');
+define('DT_BD', 'bd');
+define('DT_AT', 'at');
 
 
 define('LANG_EN', 'en');
