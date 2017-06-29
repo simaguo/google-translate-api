@@ -8,6 +8,8 @@ class Client
 {
     public $host = 'https://translate.google.cn';
     public $path = '/translate_a/single';
+    protected $model = MODEL_SIMPLE;
+
     public $option;
 
     public $client = 't';
@@ -37,18 +39,15 @@ class Client
     public $tkk;
     public $q;//源文本字符串 source text / word
 
-    public function __construct($query = '', $sl = '', $tl = '', $option = array())
+    public function __construct($query = '', $sl = '', $tl = '', $model = MODEL_SIMPLE)
     {
 
         if ($query) {
             $this->q = $query;
         }
-        if ($sl) {
-            $this->sl = $sl;
-        }
-        if ($tl) {
-            $this->tl = $tl;
-        }
+        $this->from($sl);
+        $this->to($tl);
+        $this->model($model);
         $this->tkk = $this->getTkk();
     }
 
@@ -73,6 +72,14 @@ class Client
     {
         if ($hl) {
             $this->hl = $hl;
+        }
+        return $this;
+    }
+
+    public function model($model)
+    {
+        if ($model) {
+            $this->model = $model;
         }
         return $this;
     }
@@ -112,9 +119,8 @@ class Client
         if ($query) {
             $this->q = $query;
         }
-        /*if(!$model){
-            $model = MODEL_SIMPLE;
-        }*/
+
+        $this->model($model);
 
         $this->tk = $this->tk($this->q, $this->tkk);
 
@@ -122,13 +128,13 @@ class Client
 
         $result = $this->curlGet($url, $this->getOption());
 
-        return $this->filter($result, $model);
+        return $this->filter($result);
     }
 
-    protected function filter($result, $model)
+    protected function filter($result)
     {
         $result = json_decode($result);
-        if ($result && $model == MODEL_SIMPLE && is_array($result) && isset($result[0][0][0])) {
+        if ($result && $this->model == MODEL_SIMPLE && is_array($result) && isset($result[0][0][0])) {
             return $result[0][0][0];
         }
 
