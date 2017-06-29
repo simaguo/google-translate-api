@@ -304,6 +304,7 @@ class Client
         curl_setopt($ch, CURLOPT_TIMEOUT, $time);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $option);
         $ret = curl_exec($ch);
         curl_close($ch);
