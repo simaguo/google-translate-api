@@ -259,7 +259,8 @@ class Client
         if (0 > $a) {
             $a = Tool::andOperator($a, 2147483647) + 2147483648;
         }
-        $a %= 1E6;
+        //$a %= 1E6;
+        $a = intval(substr($a,-6));
         return $a . '.' . Tool::xorOperator($a, $h);
 
     }
