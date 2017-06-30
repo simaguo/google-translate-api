@@ -201,7 +201,7 @@ class Client
     {
         for ($d = 0; $d < mb_strlen($b, 'UTF-8') - 2; $d += 3) {
             $c = mb_substr($b, $d + 2, 1, 'UTF-8');
-            $c = ord('a') <= ord($c) ? ord($c) - 87 : intval($c);
+            $c = ord('a') <= ord($c) ? ord($c) - 87 : floatval($c);
             $c = '+' == mb_substr($b, $d + 1, 1, 'UTF-8') ? Tool::unSignedShiftRightOperator($a,
                 $c) : Tool::shiftLeftOperator($a,
                 $c);
@@ -217,7 +217,7 @@ class Client
     {
         $a = $query;
         $e = explode('.', $tkk);
-        $h = intval($e[0]) ? intval($e[0]) : 0;
+        $h = floatval($e[0]) ? floatval($e[0]) : 0;
         $g = [];
         $d = 0;
         for ($f = 0; $f < mb_strlen($a, 'UTF-8'); $f++) {
@@ -253,14 +253,14 @@ class Client
             $a = $this->cipher($a, "+-a^+6");
         }
         $a = $this->cipher($a, "+-3^+b+-f");
-        $e[1] = intval($e[1]) ? intval($e[1]) : 0;
+        $e[1] = floatval($e[1]) ? floatval($e[1]) : 0;
         $a = Tool::xorOperator($a, $e[1]);
         //$a ^= intval($e[1]) ? intval($e[1]) : 0;
         if (0 > $a) {
             $a = Tool::andOperator($a, 2147483647) + 2147483648;
         }
         //$a %= 1E6;
-        $a = intval(substr($a,-6));
+        $a = floatval(substr($a,-6));
         return $a . '.' . Tool::xorOperator($a, $h);
 
     }
