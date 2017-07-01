@@ -9,6 +9,7 @@ class Client
     public $host = 'https://translate.google.cn';
     public $path = '/translate_a/single';
     protected $model = MODEL_SIMPLE;
+    public $timeout = 3;
 
     public $option;
 
@@ -76,6 +77,11 @@ class Client
         return $this;
     }
 
+    /**
+     * 模式设置
+     * @param $model
+     * @return $this
+     */
     public function model($model)
     {
         if ($model) {
@@ -113,7 +119,12 @@ class Client
         return $this;
     }
 
-
+    /**
+     * 翻译
+     * @param string $query
+     * @param string $model
+     * @return mixed
+     */
     public function translate($query = '', $model = MODEL_SIMPLE)
     {
         if ($query) {
@@ -131,6 +142,24 @@ class Client
         return $this->filter($result);
     }
 
+    /**
+     * 设置查询超时
+     * @param $sec
+     * @return $this
+     */
+    public function timeout($sec)
+    {
+        if (is_numeric($sec) && $sec > 0) {
+            $this->timeout = $sec;
+        }
+        return $this;
+    }
+
+    /**
+     * model处理，返回结果过滤
+     * @param $result
+     * @return mixed
+     */
     protected function filter($result)
     {
         $result = json_decode($result);
@@ -141,6 +170,10 @@ class Client
         return $result;
     }
 
+    /**
+     * 获取查询URL
+     * @return string
+     */
     protected function getQueryUrl()
     {
         $params = array(
@@ -213,6 +246,12 @@ class Client
 
     }
 
+    /**
+     * 获取tk
+     * @param $query
+     * @param $tkk
+     * @return string
+     */
     protected function tk($query, $tkk)
     {
         $a = $query;
@@ -260,7 +299,7 @@ class Client
             $a = Tool::andOperator($a, 2147483647) + 2147483648;
         }
         //$a %= 1E6;
-        $a = floatval(substr($a,-6));
+        $a = floatval(substr($a, -6));
         return $a . '.' . Tool::xorOperator($a, $h);
 
     }
@@ -279,6 +318,10 @@ class Client
 
     }
 
+    /**
+     * 获取tkk
+     * @return string
+     */
     protected function getTkk()
     {
         $response = $this->curlGet($this->host, $this->getOption());
@@ -298,8 +341,9 @@ class Client
         throw new \UnexpectedValueException('can\'t find TKK');
     }
 
-    protected function curlGet($url, $option = array(), $time = 3)
+    protected function curlGet($url, $option = array())
     {
+        $time = $this->timeout;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_TIMEOUT, $time);

@@ -15,7 +15,7 @@
         echo $client->translate();
         echo "\n";
 
-        $t = $client->from(LANG_CN)->to(LANG_AF)->hl(LANG_AF)->translate('老师',MODEL_ALL);
+        $t = $client->from(LANG_CN)->to(LANG_AF)->timeout(1)->translate('老师',MODEL_ALL);
 
         print_r($t);
         echo "\n";
